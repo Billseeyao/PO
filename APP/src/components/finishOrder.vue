@@ -248,11 +248,324 @@ export default {
     // this.newOrder();
     // this.closeOrder();
     // this.productQureyOrder();//创建订单页面获取 产品型号、产品号、产品名称
-    this.supplierList();
-    
-  },
+    // this.supplierList();
+
+    /**
+     * 产品管理
+     * 一个列表，按钮“新增产品”、“编辑”、“删除”
+    */
+    // this.porductList(); //查询产品列表 参数：page，limit。
+    //正常有返回后列表展示字段为：产品型号 modelNo 、产品号 productNo、产品名称 productName、产品描述 productDecribe、产品标准 qualityStandard 、备注 remarks、到货时间arrivalDate
+    // this.addProduct();//新增产品  参数：产品型号 modelNo 、产品号 productNo、产品名称 productName、产品描述 productDecribe、产品标准 qualityStandard 、备注 remarks、到货时间arrivalDate
+  // this.modifyProduct(); //“编辑”  参数：产品型号 modelNo 、产品号 productNo、产品名称 productName、产品描述 productDecribe、产品标准 qualityStandard 、备注 remarks、到货时间arrivalDate
+  // this.deleteProduct(); //"删除"
+
+    /**
+     * 客户与供应商管理
+     * 一个列表，按钮“新建供应商”、“编辑”、“删除”、“编辑开票资质”（打开后先查，后“保存”）
+    */
+  // this.supplierManageList(); //查询客户与供应商列表 参数：page，limit。
+  // 正常有返回后列表展示字段为：供应商编号manageNo、供应商名称manageName、地址address、公司电话companyTel、开户行openingBank、付款账号accountNo、付款期限payTerm、付款币种currenCy
+  // this.addSupplier();//按钮"新建供应商" 参数：供应商编号manageNo、供应商名称manageName、地址address、公司电话companyTel、开户行openingBank、付款账号accountNo、付款期限payTerm、付款币种currenCy
+  // this.modifySupplier();//按钮"编辑" 参数：供应商编号manageNo、供应商名称manageName、地址address、公司电话companyTel、开户行openingBank、付款账号accountNo、付款期限payTerm、付款币种currenCy
+  // this.deleteSupplier();//按钮"删除" 参数：供应商编号manageNo
+  // 按钮“编辑开票资质” 下包括两个接口，先查、保存。
+  // this.queryInvoice();//先查  参数：供应商编号manageNo
+  // this.addInvoice();//保存  参数：供应商编号manageNo、税号invoiceNo、开票公司名invoiceName、注册地址ivoiceAddress、电话invoicePhoneNo、开户行invoiceBank、账号invoiceAccountNo
+
+    /**
+     * 供应商联系人管理
+     * 一个列表、按钮“添加联系人”、“编辑”（打开后“保存”）、“删除”
+    */
+  //  this.supplierUserQuery(); //查询供应商联系人列表
+   // 展示字段为：供应商编号manageNo、姓名userName、电话telNo、手机号phoneNo、邮箱email、传真fax、地址address、邮编postCode
+  // this.addSpplierUser();//按钮“添加联系人” 参数：供应商编号manageNo、姓名userName、电话telNo、手机号phoneNo、邮箱email、传真fax、地址address、邮编postCode
+  //按钮“编辑” 打开后先查 ，后保存
+  // this.querySpplierUser(); //先查  返回需要展示的字段为：id编号，供应商编号manageNo、姓名userName、电话telNo、手机号phoneNo、邮箱email、传真fax、地址address、邮编postCode
+  // this.modifySpplierUser();//后保存  请求参数为：id编号，供应商编号manageNo、姓名userName、电话telNo、手机号phoneNo、邮箱email、传真fax、地址address、邮编postCode
+  // this.deleteSpplierUser(); //按钮“删除”
+ 
+ },
 
   methods: {
+      deleteSpplierUser() {
+      var that = this;
+      that.axios
+        .post("/jx_manage/supplierUser/delete", qs.stringify(
+          {id:"5"}
+          ))
+        .then(function(res) {
+          // var res = JSON.parse(res);
+          console.log(">>>>>>",res.data.code);
+          if (res.data.code == 0) {
+            that.$router.push("/finishOrder");
+          } else {
+            that.passErrorShow = true;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    }, 
+      modifySpplierUser() {
+      var that = this;
+      that.axios
+        .post("/jx_manage/supplierUser/modifyUser", qs.stringify(
+          {id:"5",manageNo:"KNF002",userName:"姚义啊改一下",telNo:"020-0121212",
+          phoneNo:"17820082239",email:"111@126.com",fax:"121212",address:"z中山公园",postCode:"121209"}
+          ))
+        .then(function(res) {
+          // var res = JSON.parse(res);
+          console.log(">>>>>>",res.data.code);
+          if (res.data.code == 0) {
+            that.$router.push("/finishOrder");
+          } else {
+            that.passErrorShow = true;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    }, 
+      querySpplierUser() {
+      var that = this;
+      that.axios
+        .post("/jx_manage/supplierUser/queryUser", qs.stringify(
+          {id:"5"}
+          ))
+        .then(function(res) {
+          // var res = JSON.parse(res);
+          console.log(">>>>>>",res.data.code);
+          if (res.data.code == 0) {
+            that.$router.push("/finishOrder");
+          } else {
+            that.passErrorShow = true;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    }, 
+     addSpplierUser() {
+      var that = this;
+      that.axios
+        .post("/jx_manage/supplierUser/save", qs.stringify(
+          {manageNo:"KNF002",userName:"姚义啊",telNo:"020-0121212",phoneNo:"17820082239",
+          email:"yilu@126.com",fax:"121212",address:"花桥镇",postCode:"431098"}
+          ))
+        .then(function(res) {
+          // var res = JSON.parse(res);
+          console.log(">>>>>>",res.data.code);
+          if (res.data.code == 0) {
+            that.$router.push("/finishOrder");
+          } else {
+            that.passErrorShow = true;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    }, 
+    queryInvoice() {
+      var that = this;
+      that.axios
+        .post("/jx_manage/supplier/queryInvoice", qs.stringify(
+          {manageNo:"KNF001"}
+          ))
+        .then(function(res) {
+          // var res = JSON.parse(res);
+          console.log(">>>>>>",res.data.code);
+          if (res.data.code == 0) {
+            that.$router.push("/finishOrder");
+          } else {
+            that.passErrorShow = true;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    }, 
+    addInvoice() {
+      var that = this;
+      that.axios
+        .post("/jx_manage/supplier/addInvoice", qs.stringify(
+          {manageNo:"KNF001",invoiceNo:"1029013901823906H",invoiceName:"凯纳方xxx",ivoiceAddress:"江苏昆山",
+          invoicePhoneNo:"010-1231231",invoiceBank:"昆山农商行",invoiceAccountNo:"56789087689"}
+          ))
+        .then(function(res) {
+          // var res = JSON.parse(res);
+          console.log(">>>>>>",res.data.code);
+          if (res.data.code == 0) {
+            that.$router.push("/finishOrder");
+          } else {
+            that.passErrorShow = true;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    }, 
+    deleteSupplier() {
+      var that = this;
+      that.axios
+        .post("/jx_manage/supplier/delete", qs.stringify(
+          {manageNo:"KNF001"}
+          ))
+        .then(function(res) {
+          // var res = JSON.parse(res);
+          console.log(">>>>>>",res.data.code);
+          if (res.data.code == 0) {
+            that.$router.push("/finishOrder");
+          } else {
+            that.passErrorShow = true;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    }, 
+    modifySupplier() {
+      var that = this;
+      that.axios
+        .post("/jx_manage/supplier/modify", qs.stringify(
+          {manageNo:"KNF001",manageName:"凯纳方001改一下",address:"江苏昆山001",companyTel:"010-21121212",
+          openingBank:"昆山农商行",accountNo:"121212121212",payTerm:"45",currenCy:"RMB"}
+          ))
+        .then(function(res) {
+          // var res = JSON.parse(res);
+          console.log(">>>>>>",res.data.code);
+          if (res.data.code == 0) {
+            that.$router.push("/finishOrder");
+          } else {
+            that.passErrorShow = true;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    }, 
+    addSupplier() {
+      var that = this;
+      that.axios
+        .post("/jx_manage/supplier/save", qs.stringify(
+          {manageNo:"KNF001",manageName:"凯纳方001",address:"江苏昆山001",companyTel:"010-21121212",
+          openingBank:"昆山农商行",accountNo:"121212121212",payTerm:"45",currenCy:"RMB"}
+          ))
+        .then(function(res) {
+          // var res = JSON.parse(res);
+          console.log(">>>>>>",res.data.code);
+          if (res.data.code == 0) {
+            that.$router.push("/finishOrder");
+          } else {
+            that.passErrorShow = true;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },  
+
+    supplierManageList() {
+      var that = this;
+      that.axios
+        .post("/jx_manage/supplier/queryList", qs.stringify(
+          {page:"1",limit:"7"}
+          ))
+        .then(function(res) {
+          // var res = JSON.parse(res);
+          console.log(">>>>>>",res.data.code);
+          if (res.data.code == 0) {
+            that.$router.push("/finishOrder");
+          } else {
+            that.passErrorShow = true;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },  
+
+      deleteProduct() {
+      var that = this;
+      that.axios
+        .post("/jx_manage/product/delete", qs.stringify(
+          {productNo:"YYL002"}
+          ))
+        .then(function(res) {
+          // var res = JSON.parse(res);
+          console.log(">>>>>>",res.data.code);
+          if (res.data.code == 0) {
+            that.$router.push("/finishOrder");
+          } else {
+            that.passErrorShow = true;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },  
+      modifyProduct() {
+      var that = this;
+      that.axios
+        .post("/jx_manage/product/modify", qs.stringify(
+          {modelNo:"YYL002",productNo:"YYL002",productName:"修改一下",productDecribe:"YYL002",
+          qualityStandard:"YYL002",unitPrice:"111",taxRate:"111",remarks:"111",arrivalDate:"2020-02-02"}
+          ))
+        .then(function(res) {
+          // var res = JSON.parse(res);
+          console.log(">>>>>>",res.data.code);
+          if (res.data.code == 0) {
+            that.$router.push("/finishOrder");
+          } else {
+            that.passErrorShow = true;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },  
+
+      addProduct() {
+      var that = this;
+      that.axios
+        .post("/jx_manage/product/save", qs.stringify(
+          {modelNo:"YYL002",productNo:"YYL002",productName:"YYL002",productDecribe:"YYL002",
+          qualityStandard:"YYL002",unitPrice:"111",taxRate:"111",remarks:"111",arrivalDate:"2020-02-02"}
+          ))
+        .then(function(res) {
+          // var res = JSON.parse(res);
+          console.log(">>>>>>",res.data.code);
+          if (res.data.code == 0) {
+            that.$router.push("/finishOrder");
+          } else {
+            that.passErrorShow = true;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },  
+
+      porductList() {
+      var that = this;
+      that.axios
+        .post("/jx_manage/product/queryList", qs.stringify(
+          {page:"1",limit:"7"}
+          ))
+        .then(function(res) {
+          // var res = JSON.parse(res);
+          console.log(">>>>>>",res.data.code);
+          if (res.data.code == 0) {
+            that.$router.push("/finishOrder");
+          } else {
+            that.passErrorShow = true;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+
       supplierList() {
       var that = this;
       that.axios
