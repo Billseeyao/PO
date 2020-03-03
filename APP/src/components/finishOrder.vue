@@ -163,6 +163,7 @@
   </div>
 </template>
 <script>
+import qs from 'qs'
 export default {
   data() {
     return {
@@ -233,18 +234,150 @@ export default {
       },
       orederView: {
         show: false
+      },
+      ruleForm: {
+        userName: "ylyao",
+        passWord: "1"
       }
     };
   },
+  
   mounted() {
-    this.getTabList();
+    // this.orderList(); //获取订单列表
+    // this.submitForm(); //登录接口
+    // this.newOrder();
+    // this.closeOrder();
+    // this.productQureyOrder();//创建订单页面获取 产品型号、产品号、产品名称
+    this.supplierList();
+    
   },
+
   methods: {
+      supplierList() {
+      var that = this;
+      that.axios
+        .post("/jx_manage/user/queryList", qs.stringify(
+          
+          ))
+        .then(function(res) {
+          // var res = JSON.parse(res);
+          console.log(">>>>>>",res.data.code);
+          if (res.data.code == 0) {
+            that.$router.push("/finishOrder");
+          } else {
+            that.passErrorShow = true;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+      productQureyOrder() {
+      var that = this;
+      that.axios
+        .post("/jx_manage/product/query", qs.stringify(
+          {orderNo:"YYL002",reason:"老板说不要了"}
+          ))
+        .then(function(res) {
+          // var res = JSON.parse(res);
+          console.log(">>>>>>",res.data.code);
+          if (res.data.code == 0) {
+            that.$router.push("/finishOrder");
+          } else {
+            that.passErrorShow = true;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+      closeOrder() {
+      var that = this;
+      that.axios
+        .post("/jx_manage/orderManage/close", qs.stringify(
+          {orderNo:"YYL002",reason:"老板说不要了"}
+          ))
+        .then(function(res) {
+          // var res = JSON.parse(res);
+          console.log(">>>>>>",res.data.code);
+          if (res.data.code == 0) {
+            that.$router.push("/finishOrder");
+          } else {
+            that.passErrorShow = true;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+      newOrder() {
+      var that = this;
+      that.axios
+        .post("/jx_manage/orderManage/modify", qs.stringify(
+          {orderNo :"YYL002",productNo :"YYL002",approver:"姚义庐002",orderDay:"2020-02-29",
+          supplierNo:"YYL002",unitPrice:"50",
+          amount:"100",taxRate:"111",taxAmount:"222",totalSum:"222",orderRemarks:"YYL002",shippingInfo:"YYL002"}
+          ))
+        .then(function(res) {
+          // var res = JSON.parse(res);
+          console.log(">>>>>>",res.data.code);
+          if (res.data.code == 0) {
+            that.$router.push("/finishOrder");
+          } else {
+            that.passErrorShow = true;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+
+      orderList() {
+      var that = this;
+      // that.$router.push("/finishOrder");
+      that.axios
+        .post("/jx_manage/orderManage/query", qs.stringify(
+          {page :"1",limit :"7"}
+          ))
+        .then(function(res) {
+          // var res = JSON.parse(res);
+          console.log(">>>>>>",res.data.code);
+          if (res.data.code == 0) {
+            that.$router.push("/finishOrder");
+          } else {
+            that.passErrorShow = true;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+      submitForm() {
+      var that = this;
+      // that.$router.push("/finishOrder");
+      that.axios
+        // .post("/jx_manage/user/login", qs.stringify({userName :"admin",passWord :"1"}))
+         .post("/jx_manage/user/getUser", qs.stringify())
+        //  .post("/jx_manage/user/logout", qs.stringify({userName :"111"}))
+        .then(function(res) {
+          // var res = JSON.parse(res);
+          console.log(">>>>>>",res.data.code);
+          if (res.data.code == 0) {
+            that.$router.push("/finishOrder");
+          } else {
+            that.passErrorShow = true;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+
     getTabList() {
       var that = this;
       this.axios({
         type: "POST",
-        url: "/jx_manage/orederManage/query",
+        url: "/jx_manage/orderManage/query",
         data: {
           page: that.tabPage,
           limit: 7
@@ -296,18 +429,21 @@ export default {
           ? "/jx_manage/orderManage/save"
           : "/jx_manage/orderManage/modify";
       that.axios
-        .post(url, that.orederForm)
+        .post(url, qs.stringify(that.orederForm))
         .then(function(res) {
-          var res = JSON.parse(res);
+          // var res = JSON.parse(res);
+           console.log(res.data.code);
           that.cancelClose();
-          if (res.code == 0) {
+          if (res.data.code == 0) {
             var msg =
               this.orederForm.orderDialogTitle == "创建订单"
                 ? "订单创建成功"
                 : "订单编辑成功";
-            that.successMsg(msg);
+                //  console.log(this.orederForm.orderDialogTitle);
+            // that.successMsg(msg);
+            that.successMsg("创建订单成功");
           } else {
-            that.errorMsg(res.msg);
+            that.errorMsg(res.data.msg);
           }
         })
         .catch(function(error) {
